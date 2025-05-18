@@ -11,3 +11,4 @@ use Illuminate\Support\Facades\Route;
 
 include_once __DIR__ . '/app/category.php';
 include_once __DIR__ . '/app/product.php';
+include_once __DIR__ . '/app/auth.php';
