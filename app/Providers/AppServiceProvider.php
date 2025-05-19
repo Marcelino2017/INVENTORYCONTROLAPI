@@ -5,9 +5,12 @@ namespace App\Providers;
 use App\Interfaces\Repositories\CategoryRepositoryInterface;
 use App\Interfaces\Repositories\ProductRepositoryInterface;
 use App\Interfaces\Repositories\UserRepositoryInterface;
+use App\Models\Product;
+use App\Policies\ProductPolicy;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +30,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::policy(Product::class, ProductPolicy::class);
     }
 }
