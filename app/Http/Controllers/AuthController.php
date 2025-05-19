@@ -32,10 +32,11 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
+        $user = $request->user('api');
+
         $data = $request->only('name', 'email', 'password', 'role');
 
-
-        if (!Auth::check() && isset($data['role']) && $data['role'] === 'admin') {
+        if (!$user && isset($data['role']) && $data['role'] == 'admin') {
             return response()->json(['message' => 'Only authenticated users can register as admin'], 403);
         }
 
