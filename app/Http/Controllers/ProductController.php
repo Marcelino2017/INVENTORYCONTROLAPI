@@ -16,11 +16,13 @@ class ProductController extends Controller
     ) {
         $this->productService = $productService;
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Product::class);
         $products = $this->productService->getAllProducts();
         if (isset($products['message'])) {
             return response()->json($products, 404);
@@ -33,6 +35,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        $this->authorize('create', Product::class);
         $data = $request->all();
         $product = $this->productService->createProduct($data);
 
@@ -48,6 +51,7 @@ class ProductController extends Controller
      */
     public function show(Int $id)
     {
+        $this->authorize('viewAny', Product::class);
         $product = $this->productService->getProductById($id);
 
         if (isset($product['message'])) {
@@ -62,6 +66,9 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Int $id)
     {
+        // Verificar autorización antes de intentar actualizar
+        $this->authorize('update', [Product::class]);
+
         $data = $request->all();
         $product = $this->productService->updateProduct($id, $data);
 
@@ -77,6 +84,7 @@ class ProductController extends Controller
      */
     public function destroy(Int $id)
     {
+        $this->authorize('delete', Product::class);
         $deleted = $this->productService->deleteProduct($id);
 
         if (isset($deleted['message'])) {
