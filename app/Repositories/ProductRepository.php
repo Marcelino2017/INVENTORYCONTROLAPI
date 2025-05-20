@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\ProductResource;
 use App\Interfaces\Repositories\ProductRepositoryInterface;
 use App\Models\Product;
 
@@ -19,12 +20,13 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getAllProducts()
     {
-        return $this->model->all();
+        $products = $this->model->with(['category'])->get();
+        return ProductResource::collection($products);
     }
 
     public function getProductById(int $id)
     {
-        $product = $this->model->find($id);
+        $product = $this->model->with('category')->find($id);
         if (!$product) {
             return null;
         }

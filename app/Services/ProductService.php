@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\ProductResource;
 use App\Interfaces\Repositories\ProductRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,7 @@ class ProductService
         if ($products->isEmpty()) {
             return ['message' => 'No products found'];
         }
-        return ['data' => $products];
+        return ['data' => ProductResource::collection($products)];
     }
 
 
@@ -34,7 +35,7 @@ class ProductService
         if (!$product) {
             return ['message' => 'Product not found'];
         }
-        return ['data' => $product];
+        return ['data' => new ProductResource($product)];
     }
 
     public function createProduct(array $data)
