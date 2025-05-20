@@ -8,6 +8,8 @@ API RESTful desarrollada con Laravel para gestionar inventarios y usuarios con c
    Opté por usar un enum en la tabla de usuarios para definir los roles (admin, user), ya que solo se manejan dos y no era necesario crear una tabla adicional. Pero en dado caso de que se utiizar mas roles implementaria spatie/laravel-permission para entonos mas complejos por su facilidad de uso con mayor catidad de roles ficilidad de validar esto. Sin embargo, si el proyecto llegara a requerir más roles o permisos más complejos, consideraría implementar el paquete `spatie/laravel-permission`, que facilita mucho la gestión y validación de roles en aplicaciones más grandes.
 2. Middleware o Paquete de Autorización
    Se implemento la libreria el middleware `auth:api` y la libreria ` tymon/jwt-auth` para la autenticaion con jwt
+3. Policy
+   Se utilizado Policies para validar la autorización de los usuarios en función de sus roles.
 
 ## 🔒 Seguridad
 
@@ -55,7 +57,6 @@ composer install
 cp .env.example .env
 ```
 
-
 4. **Configurar variables de entorno en `.env`**
 
 Ejemplo básico:
@@ -76,7 +77,6 @@ DB_PASSWORD=
 
 JWT_SECRET=tu_clave_jwt_generada
 ```
-
 
 5. **Generar clave de aplicación**
 
@@ -101,4 +101,15 @@ php artisan db:seed
 
 ```bash
 php artisan serve
+```
+
+### **Usuarios para pruebas**
+
+```
+email: admin@example.com
+password: password
+
+
+email: user@example.com
+password: password
 ```
