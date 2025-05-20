@@ -1,61 +1,104 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API de Gestión de Inventario Simple con Roles
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API RESTful desarrollada con Laravel para gestionar inventarios y usuarios con control de roles (admin y user).
 
-## About Laravel
+### 📐 Decisiones de Diseño
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. Enum vs Tabla de Roles
+   Opté por usar un enum en la tabla de usuarios para definir los roles (admin, user), ya que solo se manejan dos y no era necesario crear una tabla adicional. Pero en dado caso de que se utiizar mas roles implementaria spatie/laravel-permission para entonos mas complejos por su facilidad de uso con mayor catidad de roles ficilidad de validar esto. Sin embargo, si el proyecto llegara a requerir más roles o permisos más complejos, consideraría implementar el paquete `spatie/laravel-permission`, que facilita mucho la gestión y validación de roles en aplicaciones más grandes.
+2. Middleware o Paquete de Autorización
+   Se implemento la libreria el middleware `auth:api` y la libreria ` tymon/jwt-auth` para la autenticaion con jwt
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🔒 Seguridad
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Se implemento la librería `tymon/jwt-auth` para la autenticación con JWT, lo que permite validar al usuario sin necesidad de guardar información en el servidor, ya que toda la información necesaria va dentro del token. Además, el token va cifrados, por lo que no pueden ser modificados sin autorización.
 
-## Learning Laravel
+## 🧠 Arquitectura y Patrones
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* **Controller-Service-Repository** :
+  * Contralador: Se utilizo para coordinar las peticione; el cual se encarga de validar la peticion http, delengando asi la logica los servicio
+  * Services: Se manejo la lógica del negocio, encargados de procesar la información y la interacción con los repositorios.
+  * Repositories: se encargo de las consultas a los datos, centralizando las consultas y facilitando cambios en la capa de datos sin afectar la lógica del negocio
+* **SOLID pricipio de responsabilidad unica** Por ejemplo, los Controladores manejan solo las peticiones y respuestas, los Servicios contienen la lógica del negocio, y los Repositorios solo acceden a la base de datos.
+* **SOLID Principio de Inversión de Dependencias** Por ejemplo, los servicios dependen de interfaces de repositorios, que se inyectan mediante el contenedor de dependencias de Laravel.
+* **SOLID Principio de Segregación de Interfaces (Interface Segregation Principle)**  Se definen interfaces específicas y pequeñas para cada funcionalidad, evitando que las clases dependan de métodos que no usan.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🚀 Requisitos del sistema
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Asegúrate de tener instalado lo siguiente:
 
-## Laravel Sponsors
+- **PHP >= 8.1**
+- **Composer >= 2.x**
+- **MySQL >= 5.7**
+- **Node.js y npm** (para compilar assets si aplica)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🛠️ Instrucciones para configuración local
 
-### Premium Partners
+Sigue estos pasos para correr la API en tu entorno local:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. **Clonar el repositorio**
 
-## Contributing
+```
+git clone https://github.com/Marcelino2017/INVENTORYCONTROLAPI.git
+cd INVENTORYCONTROLAPI
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Instalar dependencias PHP**
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. **Copiar el archivo de entorno y configurarlo**
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+4. **Configurar variables de entorno en `.env`**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Ejemplo básico:
+
+```
+APP_NAME=INVENTORYCONTROLAPI
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=inventory_db
+DB_USERNAME=root
+DB_PASSWORD=
+
+JWT_SECRET=tu_clave_jwt_generada
+```
+
+
+5. **Generar clave de aplicación**
+
+```bash
+php artisan key:generate
+php artisan jwt:secret
+```
+
+6. **Ejecutar las migraciones**
+
+```bash
+php artisan migrate
+```
+
+7. **(Opcional) Ejecutar los seeders**
+
+```bash
+php artisan db:seed
+```
+
+8. **Levantar el servidor**
+
+```bash
+php artisan serve
+```
