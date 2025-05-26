@@ -5,7 +5,7 @@ API RESTful desarrollada con Laravel para gestionar inventarios y usuarios con c
 ### 📐 Decisiones de Diseño
 
 1. Enum vs Tabla de Roles
-   Opté por usar un enum en la tabla de usuarios para definir los roles (admin, user), ya que solo se manejan dos y no era necesario crear una tabla adicional. Pero en dado caso de que se utiizar mas roles implementaria spatie/laravel-permission para entonos mas complejos por su facilidad de uso con mayor catidad de roles ficilidad de validar esto. Sin embargo, si el proyecto llegara a requerir más roles o permisos más complejos, consideraría implementar el paquete `spatie/laravel-permission`, que facilita mucho la gestión y validación de roles en aplicaciones más grandes.
+   Opté por usar un enum en la tabla de usuarios para definir los roles (admin, user), ya que solo se manejan dos y no era necesario crear una tabla adicional.Sin embargo, en caso de que el proyecto llegue a requerir más roles o una gestión de permisos más compleja, consideraría implementar el paquete  `spatie/laravel-permission`, ya que facilita considerablemente la administración y validación de roles en aplicaciones de mayor escala..
 2. Middleware o Paquete de Autorización
    Se implemento la libreria el middleware `auth:api` y la libreria ` tymon/jwt-auth` para la autenticaion con jwt
 3. Policy
